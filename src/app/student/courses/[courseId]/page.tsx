@@ -14,7 +14,7 @@ import { BookOpen, Clock, BarChart, CheckCircle } from "lucide-react";
 export default async function CourseDetailsPage({
   params,
 }: {
-  params: { courseId: string };
+  params: Promise<{ courseId: string }>;
 }) {
   const user = await getUserData();
   if (user.error) {
@@ -25,7 +25,7 @@ export default async function CourseDetailsPage({
   }
 
   const course = await prisma.course.findUnique({
-    where: { id: params.courseId },
+    where: { id: (await params).courseId },
     include: {
       teacher: true,
       enrollments: {
@@ -188,7 +188,7 @@ export default async function CourseDetailsPage({
                   <EnrollButton
                     courseId={course.id}
                     studentId={user.id}
-                  
+
                   />
                 </div>
               )}
@@ -203,7 +203,7 @@ export default async function CourseDetailsPage({
             <CardContent className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">عدد الطلاب:</span>
-                <span className="font-medium">{ 0}</span>
+                <span className="font-medium">{0}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">تاريخ الإنشاء:</span>
