@@ -17,7 +17,7 @@ import Image from 'next/image'
 import { ShowCourseDialog } from '@/components/ShowCourseDialog'
 
 
-export default function EditCoursePage({ params }: { params: { courseId: string } }) {
+export default function EditCoursePage({ params }: { params: Promise<{ courseId: string }> }) {
   const router = useRouter()
   const [isGenerating, setIsGenerating] = useState({
     image: false,
