@@ -43,11 +43,9 @@ export async function GET(request: Request, data: { params: Params }) {
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { course_id: string } }
-) {
-  const { course_id } = await params;
+export async function PUT(request: Request, data: { params: Params }) {
+  const params = await data.params;
+  const course_id = params.course_id;
 
   try {
     const body = await request.json();
@@ -72,13 +70,12 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: Request, data: { params: Params }) {
+  const params = await data.params;
+  const course_id = params.course_id;
   try {
     await prisma.course.delete({
-      where: { id: params.id },
+      where: { id: course_id },
     });
     return NextResponse.json({ message: "Course deleted" }, { status: 200 });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
