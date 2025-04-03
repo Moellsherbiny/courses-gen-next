@@ -8,24 +8,21 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { quizSchema, type QuizFormValues } from '@/app/validations/quiz-schema'
 import { Loader2, Plus, Trash } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useFieldArray } from 'react-hook-form'
 import { QuizService } from '@/services/quizService'
 
 
 export default function QuizForm({
-  params,
-  // courseId,
   initialData
 }: {
-  params: { courseId: string }
-  // courseId: string
   initialData?: QuizFormValues
 }) {
   const router = useRouter()
   // const { data: session } = useSession()
-  const { courseId } = params
+  const { courseId } = useParams<{ courseId: string }>()
+
   const form = useForm<QuizFormValues>({
     resolver: zodResolver(quizSchema),
     defaultValues: initialData || {

@@ -6,14 +6,14 @@ import { redirect } from "next/navigation";
 export default async function SendFeedbackPage({
   params,
 }: {
-  params: { studentId: string };
+  params: Promise<{ studentId: string }>;
 }) {
   const teacher = await getUserData();
   if (teacher.error || teacher.role !== "teacher") {
     redirect("/");
   }
   const student = await prisma.user.findUnique({
-    where: { id: params.studentId },
+    where: { id: (await params).studentId },
   });
   if (!student) {
     return <div>الطالب غير موجود</div>;
