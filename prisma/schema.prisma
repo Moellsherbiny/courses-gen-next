@@ -1,0 +1,173 @@
+// schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  student
+  teacher
+}
+
+model User {
+  id                 String            @id @default(cuid())
+  name               String?
+  email              String            @unique
+  emailVerified      DateTime?
+  password           String?
+  role               Role              @default(student)
+  image              String?
+  accounts           Account[]
+  sessions           Session[]
+  Authenticator      Authenticator[]
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  contentPreferences String?
+  // For teachers: courses they create
+  courses            Course[]
+  // For students: enrollments in courses
+  enrollments        Enrollment[]
+  // Analysis results for students
+  analyses           StudentAnalysis[]
+  // Feedback relations
+  feedbackGiven      Feedback[]        @relation("FeedbackTeacher")
+  feedbackReceived   Feedback[]        @relation("FeedbackStudent")
+  // Surveys submitted by a student
+  surveys            Survey[]
+  Quiz               Quiz[]
+}
+
+// localhost:3000/users/5 xx
+// 
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String   @unique
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
+
+model Course {
+  id             String       @id @default(uuid())
+  title          String
+  description    String
+  field          String
+  level          String?
+  targetAudience String?
+  duration       String?
+  goals          String?
+  keywords       String?
+  imagePrompt    String?
+  youtubeQuery   String?
+  generatedImage String?
+  lessons        Json?
+  videos         Json?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  teacherId      String
+  teacher        User         @relation(fields: [teacherId], references: [id])
+  quiz           Quiz[]
+  enrollments    Enrollment[] 
+}
+
+model Enrollment {
+  id         String   @id @default(cuid())
+  studentId  String
+  courseId   String
+  progress   Int      @default(0)
+  completed  Boolean  @default(false)
+  student    User     @relation(fields: [studentId], references: [id])
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrolledAt DateTime @default(now())
+
+  @@unique([studentId, courseId])
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  teacherId String
+  studentId String
+  feedback  String
+  createdAt DateTime @default(now())
+  teacher   User     @relation("FeedbackTeacher", fields: [teacherId], references: [id])
+  student   User     @relation("FeedbackStudent", fields: [studentId], references: [id])
+}
+
+model Quiz {
+  id              String   @id @default(cuid())
+  teacherId       String
+  courseId        String
+  quizTitle       String
+  quizDescription String
+  questions       Json
+  createdAt       DateTime @default(now())
+
+  course  Course @relation(fields: [courseId], references: [id])
+  teacher User   @relation(fields: [teacherId], references: [id])
+}
+
+model Survey {
+  id        String   @id @default(cuid())
+  studentId String
+  response  String
+  createdAt DateTime @default(now())
+  student   User     @relation(fields: [studentId], references: [id])
+}
+
+model StudentAnalysis {
+  id        String   @id @default(cuid())
+  studentId String
+  analysis  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  student   User     @relation(fields: [studentId], references: [id])
+}
