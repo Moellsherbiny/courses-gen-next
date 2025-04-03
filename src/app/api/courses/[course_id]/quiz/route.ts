@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { course_id: string } }
-) {
+export async function GET({ params }: { params: { course_id: string } }) {
   try {
     const quiz = await prisma.quiz.findFirst({
       where: { courseId: params.course_id },
