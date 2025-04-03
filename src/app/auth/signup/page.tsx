@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { FcGoogle } from "react-icons/fc";
 import { ArrowLeft } from "lucide-react";
 import Logo from "@/components/Logo";
+import { axiosInstance } from "@/lib/axiosInstance";
 
 export default function SignUpPage() {
   const [name, setName] = useState("");
@@ -27,12 +28,11 @@ export default function SignUpPage() {
     }
     // Call your signup API endpoint; adjust URL and logic as needed.
     try {
-      const res = await fetch("http://localhost:3000/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+      const res = await axiosInstance.post("/auth/register", {
+
+        name, email, password
       });
-      if (!res.ok) toast("الرجاء المحاولة مرة اخري مع بريد الكتروني اخر");
+      if (res.status !== 200) toast("الرجاء المحاولة مرة اخري مع بريد الكتروني اخر");
       toast("تم إنشاء الحساب بنجاح");
       // Optionally, auto-login or redirect to sign in page:
       signIn("credentials", { email, password });
