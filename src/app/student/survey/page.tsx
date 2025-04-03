@@ -9,7 +9,6 @@ export default function StudentSurveyPage() {
   const router = useRouter();
   const [preference, setPreference] = useState("");
   const [loading, setLoading] = useState(false);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
