@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma"; // Adjust path as needed
 import { courseSchema } from "@/app/validations/course-schema";
-
-export async function GET(
-  request: Request,
-  { params }: { params: { course_id: string } }
-) {
-  const { course_id } = await params;
+type Params = Promise<{
+  course_id: string;
+}>;
+export async function GET(request: Request, data: { params: Params }) {
+  const params = await data.params;
+  const course_id = params.course_id;
   try {
     const course = await prisma.course.findUnique({
       where: { id: course_id },
