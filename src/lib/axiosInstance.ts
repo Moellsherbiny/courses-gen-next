@@ -1,6 +1,5 @@
 import axios from "axios";
-const baseURL = process.env.BASE_URL;
 export const axiosInstance = axios.create({
-  baseURL: `${baseURL}/api`,
+  baseURL: `https://courses-gen-next.vercel.app/api`,
   withCredentials: true,
 });

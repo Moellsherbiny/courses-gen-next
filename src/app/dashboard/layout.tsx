@@ -5,11 +5,11 @@ import { getUserData } from '@/lib/getUserData';
 function layout({ children }: { children: React.ReactNode }) {
   const user = getUserData();
   if (!user) {
-    redirect('/auth/login');
+    redirect('/');
   }
 
   return (
-    <div>{children}</div>
+    <main>{children}</main>
   )
 }
 

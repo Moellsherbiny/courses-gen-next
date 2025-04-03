@@ -7,7 +7,7 @@ import Logo from "@/components/Logo";
 const links = [
   { href: "/", label: "الرئيسية" },
   { href: "/about", label: "معرفة المزيد" },
-  { href: "/services", label: "كيف تعمل؟" },
+  { href: "/how-it-works", label: "كيف تعمل؟" },
 ]
 export default function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
