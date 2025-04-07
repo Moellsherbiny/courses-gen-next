@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { axiosInstance } from "@/lib/axiosInstance";
@@ -10,6 +9,8 @@ import { Edit2, FolderOpenIcon, Trash } from "lucide-react";
 import Image from "next/image";
 import Markdown from "react-markdown";
 import courseDefailtImg from "../../../assets/course-default.png";
+
+
 type Course = {
   id: string;
   title: string;
@@ -20,6 +21,7 @@ type Course = {
 
 const CourseListPage = () => {
   const [courses, setCourses] = useState<Course[]>([]);
+  // localhost:3000/teacher/courses/[variable]
   const deleteHandler = async (id: string) => {
     try {
       const res = await axiosInstance.delete(`/courses?course=${id}`, {

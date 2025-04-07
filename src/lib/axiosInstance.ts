@@ -1,5 +1,6 @@
 import axios from "axios";
+
 export const axiosInstance = axios.create({
-  baseURL: `https://courses-gen-next.vercel.app/api`,
+  baseURL: `http://localhost:3000/api`,
   withCredentials: true,
 });

@@ -81,7 +81,9 @@ type Course = {
 export default function CourseViewPage() {
   const router = useRouter()
   const { courseId } = useParams<{ courseId: string }>()
+
   const [course, setCourse] = useState<Course | null>(null)
+
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('overview')
 
@@ -137,7 +139,7 @@ export default function CourseViewPage() {
 
   const safeGoals = (goals?: string | null) =>
     goals ? goals.split('\n').filter(Boolean) : []
-
+  
   const sortedLessons = Array.isArray(course.lessons)
     ? [...course.lessons].sort((a, b) => a.order - b.order)
     : []

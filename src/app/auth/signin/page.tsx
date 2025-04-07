@@ -15,7 +15,7 @@ export default function SignInPage() {
   const handleCredentialsSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Sign in with credentials; adjust callbackUrl as needed
-    await signIn("credentials", { email, password });
+    signIn("credentials", { email, password });
   };
 
   return (

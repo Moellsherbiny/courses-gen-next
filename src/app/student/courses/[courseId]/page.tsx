@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BookOpen, Clock, BarChart, CheckCircle } from "lucide-react";
-
+import Markdown from "react-markdown";
 export default async function CourseDetailsPage({
   params,
 }: {
@@ -78,9 +78,11 @@ export default async function CourseDetailsPage({
               <div className="space-y-4">
                 <div>
                   <h3 className="font-medium">الوصف</h3>
-                  <p className="text-muted-foreground">
-                    {course.description || 'لا يوجد وصف متاح'}
-                  </p>
+                  <div className="text-muted-foreground">
+                    <Markdown>
+                      {course.description || 'لا يوجد وصف متاح'}
+                    </Markdown>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">

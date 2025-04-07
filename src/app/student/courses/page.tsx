@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 export default async function StudentCoursesPage() {
   const user = await getUserData();
   if (user.error) return <div>حدث خطأ أثناء تحميل بيانات المستخدم</div>;
-  if (user.role !== "student") {
+  if (user.role !== "student" && user.role !== "teacher") {
     redirect("/teacher/courses");
   }
 

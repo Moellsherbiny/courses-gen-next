@@ -29,7 +29,7 @@ const TeacherDashboard = async () => {
   const greeting = ` ${timeDayOrNight} الخير ${user.name?.split(' ')[0] ?? 'User'}`;
   return (
     <div dir="rtl" className="bg-gray-100 min-h-screen">
-      <Navbar name={user.name ?? ""} image={user.image ?? ""} />
+      <Navbar name={user.name ?? ""} image={user.image ?? ""} role="teacher" />
       <div className="container min-h-[calc(100vh-72px)] flex flex-col justify-center mx-auto p-6">
         <h1 className="text-3xl text-center font-bold mb-6">{greeting}</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">

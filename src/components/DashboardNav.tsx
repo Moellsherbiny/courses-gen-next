@@ -13,18 +13,32 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut } from "next-auth/react";
 
-const Navbar = ({ name, image }: { name: string, image: string }) => {
+const Navbar = ({ name, image, role }: { name: string; image: string; role: "student" | "teacher" }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  console.log(role)
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+
+  const links = role === "teacher"
+    ?
+    [
+      { href: "/dashboard", label: "لوحة القيادة" },
+      { href: "/teacher/courses", label: "الدورات" },
+      { href: "/teacher/students", label: "الطلاب" },
+    ]
+    : [
+      { href: "/dashboard", label: "لوحة القيادة" },
+      { href: "/student/courses", label: "كورساتي" },
+      
+    ];
 
   return (
     <nav className="bg-gray-50 p-4 text-primary shadow-md">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo on the left */}
+        {/* Logo */}
         <div className="order-1">
           <Logo />
         </div>
+
         {/* Desktop Navigation */}
         <div className="order-2 hidden md:flex flex-row-reverse items-center gap-6">
           <DropdownMenu>
@@ -32,30 +46,31 @@ const Navbar = ({ name, image }: { name: string, image: string }) => {
               <Avatar>
                 <AvatarImage
                   src={image || "https://github.com/shadcn.png"}
-                  alt="صورة المعلم"
+                  alt="صورة المستخدم"
                 />
-                <AvatarFallback>
-                  {name.slice(0, 2)}
-                </AvatarFallback>
+                <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>الملف الشخصي</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href="/profile" className="flex items-center gap-2">
+                  الملف الشخصي
+                </Link>
+
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => { signOut() }}>تسجيل الخروج</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => signOut()}>تسجيل الخروج</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Link href="/dashboard" className="hover:underline">
-            لوحة القيادة
-          </Link>
-          <Link href="/teacher/courses" className="hover:underline">
-            الدورات
-          </Link>
-          <Link href="/teacher/students" className="hover:underline">
-            الطلاب
-          </Link>
+
+          {links.map((link) => (
+            <Link key={link.href} href={link.href} className="hover:underline">
+              {link.label}
+            </Link>
+          ))}
         </div>
-        {/* Mobile Menu Toggle */}
+
+        {/* Mobile Toggle */}
         <div className="md:hidden order-2">
           <button onClick={toggleMobileMenu} className="p-2">
             <svg
@@ -66,47 +81,33 @@ const Navbar = ({ name, image }: { name: string, image: string }) => {
               xmlns="http://www.w3.org/2000/svg"
             >
               {isMobileMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               )}
             </svg>
           </button>
         </div>
       </div>
+
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="mt-4 flex flex-col gap-2 md:hidden">
-          <Link href="/dashboard" className="hover:underline">
-            لوحة القيادة
-          </Link>
-          <Link href="/teacher/courses" className="hover:underline">
-            الدورات
-          </Link>
-          <Link href="/teacher/students" className="hover:underline">
-            الطلاب
-          </Link>
+          {links.map((link) => (
+            <Link key={link.href} href={link.href} className="hover:underline">
+              {link.label}
+            </Link>
+          ))}
+
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="flex items-center gap-2">
                 <Avatar>
                   <AvatarImage
                     src={image || "https://github.com/shadcn.png"}
-                    alt="صورة المعلم"
+                    alt="صورة المستخدم"
                   />
-                  <AvatarFallback>
-                    {name.slice(0, 2)}
-                  </AvatarFallback>
+                  <AvatarFallback>{name.slice(0, 2)}</AvatarFallback>
                 </Avatar>
                 <span>الملف الشخصي</span>
               </div>
@@ -114,7 +115,7 @@ const Navbar = ({ name, image }: { name: string, image: string }) => {
             <DropdownMenuContent>
               <DropdownMenuItem>الملف الشخصي</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => { signOut() }}>تسجيل الخروج</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => signOut()}>تسجيل الخروج</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
